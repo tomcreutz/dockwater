@@ -11,6 +11,9 @@ ARG DIST=noetic
 # Set Gazebo version
 ARG GAZ=gazebo11
 
+ENV TZ=Europe/Berlin
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 # Required utilities
 RUN apt update \
  && apt install -y --no-install-recommends\
@@ -21,6 +24,7 @@ RUN apt update \
         git \
         libeigen3-dev \
         libgles2-mesa-dev \
+        libpcl-dev \
         lsb-release \
         pkg-config \
         protobuf-compiler \
@@ -39,7 +43,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
  && apt update \
  && apt install -y \
     tzdata \
- && ln -fs /usr/share/zoneinfo/America/Los_Angeles /etc/localtime \
+ && ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime \
  && dpkg-reconfigure --frontend noninteractive tzdata \
  && apt clean
 
@@ -85,6 +89,8 @@ RUN /bin/sh -c 'echo "deb http://packages.ros.org/ros/ubuntu ${RELEASE} main" > 
     ros-${DIST}-velodyne-gazebo-plugins \
     ros-${DIST}-velodyne-simulator \
     ros-${DIST}-xacro \
+    ros-${DIST}-pcl-ros \
+    ros-${DIST}-image-view \
  && apt clean
 
 # Optional: Dev. tools, applications, etc.
